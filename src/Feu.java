@@ -16,6 +16,10 @@ public class Feu {
            System.out.format("Génération d'un élément Feu aux coordonnees : %d %d%n",X,Y);
            
         }
+
+        public String getCoord() {   
+                 return (X+" "+Y);
+        }
         public int[] etat(){
                 int[] etat = {this.X,this.Y,this.intensite,this.rayon};
                 System.out.format("X : %d Y : %d Intensité : %d Rayon : %d%n",etat[0],etat[1],etat[2],etat[3]);
@@ -24,12 +28,13 @@ public class Feu {
 
         }
         public void allumer(){
-                if (this.intensite == 1){System.out.println("Feu deja allumé%n")}
+                if (this.intensite == 1){
+                        System.out.println("Feu deja allumé");}
                 else{this.intensite = 1;}
         }
 
         public void eteindre(){
-                this.intensite = 1;
+                this.intensite = 0;
         }
 
 
