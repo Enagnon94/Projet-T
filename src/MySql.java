@@ -1,24 +1,19 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class MySql {
-        private static final Connection conn;
-        public MySql() throws SQLException{
+// Notice, do not import com.mysql.jdbc.*
+// or you will have problems!
 
-        try{    
-                
-                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/IoT","Enagnon","bdd");  
-                                                  //here sonoo is database name, root is username and password  
-              //  Statement stmt = conn.createStatement();  
-             //   ResultSet rs = stmt.executeQuery("select * from emp");  
-             //   while(rs.next()) {
-                //System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3));  }
-                conn.close();  
-                }catch (Exception e){ System.out.println(e);}  
+public class LoadDriver {
+    public static void main(String[] args) {
+        try {
+            // The newInstance() call is a work around for some
+            // broken Java implementations
 
-        }         
-        
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (Exception ex) {
+            // handle the error
+        }
+    }
 }
-

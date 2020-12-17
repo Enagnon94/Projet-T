@@ -8,5 +8,6 @@ public class App {
        feu.allumer();
        System.out.println(feu.getCoord());
        
+       
     }
 }
