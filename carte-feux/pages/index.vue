@@ -22,6 +22,14 @@
         >
           GitHub
         </a>
+        <a
+          href="http://localhost:3000/carte"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="button--green"
+        >
+        Carte
+        </a>
       </div>
     </div>
   </div>
