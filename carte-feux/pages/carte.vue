@@ -41,7 +41,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 #carte {
-  height: 300px;
+  height: 500px;
   border-style: solid;
   border-color: darkblue;
 }
