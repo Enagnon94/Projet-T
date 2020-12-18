@@ -1,7 +1,11 @@
 <template>
   <div id="ecranSupervision">
+    <h1>Ecran de supervision</h1>
+    <h2>Centre de Villeurbanne</h2>
+    <div id="simul">
     <carte :flammes="flammes" :caserne="casernes" :camions="camions" ></carte>
     <info-simul :flammes="flammes" :caserne="casernes" :camions="camions"></info-simul>
+    </div>
   </div>
 </template>
 
@@ -28,7 +32,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#ecranSupervision {
+h1, h2 {
+  text-align: center;
+}
+#simul {
   height: 500px;
   display: flex;
 }
