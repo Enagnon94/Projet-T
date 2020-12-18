@@ -23,7 +23,7 @@
           GitHub
         </a>
         <a
-          href="http://localhost:3000/carte"
+          href="http://localhost:3000/ecran"
           target="_blank"
           rel="noopener noreferrer"
           class="button--green"
