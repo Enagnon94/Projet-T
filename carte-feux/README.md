@@ -20,5 +20,6 @@ $ npm run generate
 - Se placer dans le dossier carte-feux
 - lancer la commande : npm install
 - lancer la commande : npm run dev
+- aller à l'adresse localhost:3000/ecran
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
