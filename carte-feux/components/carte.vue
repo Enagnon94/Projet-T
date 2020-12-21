@@ -7,10 +7,19 @@
       :max-bounds="zoneRestreinte"
     >
       <l-tile-layer :url="urlTuiles" :attribution="attribution" />
+      <l-geo-json :geojson="geojson"> 
+      </l-geo-json>
       <span v-for="(flamme, f) in flammes" :key="f">
         <l-marker ref="flamme" :lat-lng="flamme.coord" :key="f">
           <l-popup>ça brule ici</l-popup>
-          <l-icon :iconUrl="iconFlamme" :iconSize="flamme.rayon*coefficientIconSize"></l-icon>
+          <l-icon :iconUrl="iconFlamme" :iconSize="[flamme.rayon*coefficientIconSize, flamme.rayon*coefficientIconSize ]"></l-icon>
+        </l-marker>
+      </span>
+
+      <span v-for="(caserne, c) in casernes" :key="c">
+        <l-marker ref="caserne" :lat-lng="caserne.coord" :key="c">
+          <l-popup>{{caserne.name}}</l-popup>
+          <l-icon :iconUrl="iconCaserne" :iconSize="[60, 40]"></l-icon>
         </l-marker>
       </span>
     </l-map>
@@ -45,9 +54,31 @@ export default {
       ],
       attribution: '&copy; <a href="https://docs.mapbox.com/api/">Mapbox</a>',
       iconFlamme: "http://cdn.onlinewebfonts.com/svg/img_267353.svg",
-      coefficientIconSize: "20"
+      iconCaserne: "https://www.flaticon.com/de/premium-icon/icons/svg/3211/3211981.svg",
+      iconCaserne2: "https://www.flaticon.com/de/premium-icon/icons/svg/3211/3211981.svg",
+      coefficientIconSize: "20",
+      geojson: null
+
     };
   },
+  async beforeMount() {
+    this.loading = true;
+    const response = await fetch('https://api.mapbox.com/directions/v5/mapbox/cycling/' + this.casernes[0].coord[1] + ',' + this.casernes[0].coord[0] + ';' + this.flammes[1].coord[1] + ',' + this.flammes[1].coord[0] + '?steps=true&geometries=geojson&access_token=pk.eyJ1IjoiZGRkZGQ0NCIsImEiOiJjazRtdm01NHQwOG14M21wNWdsdXY1djhqIn0.GuEePwUCtxgMwBMdjBy7WA')
+    const data = await response.json();
+    const route = data.routes[0].geometry.coordinates;
+    this.geojson = {
+      
+      features: [{
+        type: 'Feature',
+        properties: {},
+      geometry: {
+        type: 'LineString',
+        coordinates: route
+      }
+      }],
+    };
+    this.loading = false;
+  }
 };
 </script>
 <style lang="scss" scoped>
