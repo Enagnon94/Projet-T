@@ -9,19 +9,17 @@
       <l-tile-layer :url="urlTuiles" :attribution="attribution" />
       <l-geo-json :geojson="geojson"> 
       </l-geo-json>
-      <span v-for="(flamme, f) in flammes" :key="f">
-        <l-marker ref="flamme" :lat-lng="flamme.coord" :key="f">
+
+        <l-marker v-for="(flamme, f) in flammes" ref="flamme" :lat-lng="flamme.coord" :key="f">
           <l-popup>ça brule ici</l-popup>
           <l-icon :iconUrl="iconFlamme" :iconSize="[flamme.rayon*coefficientIconSize, flamme.rayon*coefficientIconSize ]"></l-icon>
         </l-marker>
-      </span>
 
-      <span v-for="(caserne, c) in casernes" :key="c">
-        <l-marker ref="caserne" :lat-lng="caserne.coord" :key="c">
+        <l-marker v-for="(caserne, c) in casernes" ref="caserne" :lat-lng="caserne.coord" :key="c">
           <l-popup>{{caserne.name}}</l-popup>
           <l-icon :iconUrl="iconCaserne" :iconSize="[60, 40]"></l-icon>
         </l-marker>
-      </span>
+        
     </l-map>
   </div>
 </template>
