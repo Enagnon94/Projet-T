@@ -12,8 +12,7 @@
 
 <script>
 import carte from "@/components/carte";
-import infoSimul from "@/components/infoSimul"
-import InfoSimul from '~/components/infoSimul.vue';
+import infoSimul from "@/components/infoSimul";
 export default {
   components: {
     carte,
