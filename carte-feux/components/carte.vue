@@ -15,6 +15,13 @@
           <l-icon :iconUrl="iconFlamme" :iconSize="[flamme.rayon*coefficientIconSize, flamme.rayon*coefficientIconSize ]"></l-icon>
         </l-marker>
       </span>
+
+      <span v-for="(caserne, c) in casernes" :key="c">
+        <l-marker ref="caserne" :lat-lng="caserne.coord" :key="c">
+          <l-popup>{{caserne.name}}</l-popup>
+          <l-icon :iconUrl="iconCaserne" :iconSize="[60, 40]"></l-icon>
+        </l-marker>
+      </span>
     </l-map>
   </div>
 </template>
@@ -23,6 +30,7 @@
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import vuex from "vuex";
 
 export default {
   props: {
@@ -47,6 +55,8 @@ export default {
       ],
       attribution: '&copy; <a href="https://docs.mapbox.com/api/">Mapbox</a>',
       iconFlamme: "http://cdn.onlinewebfonts.com/svg/img_267353.svg",
+      iconCaserne: "https://www.flaticon.com/de/premium-icon/icons/svg/3211/3211981.svg",
+      iconCaserne2: "https://www.flaticon.com/de/premium-icon/icons/svg/3211/3211981.svg",
       coefficientIconSize: "20",
       geojson: null
 
