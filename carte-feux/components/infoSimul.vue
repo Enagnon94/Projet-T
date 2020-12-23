@@ -4,6 +4,7 @@
             <p>Flamme {{f}} : </p>
             <li>Coordonnées : {{flamme.coord}}</li>
             <li>Rayon : {{flamme.rayon}}</li>
+            <li>Intensité : {{flamme.intensite}}</li>
         </ul>
         
         <ul v-for="(caserne, c) in casernes" :key="'infoCaserne'+c">

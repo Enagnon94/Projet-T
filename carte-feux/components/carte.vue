@@ -60,23 +60,31 @@ export default {
 
     };
   },
-  async beforeMount() {
-    this.loading = true;
-    const response = await fetch('https://api.mapbox.com/directions/v5/mapbox/cycling/' + this.casernes[0].coord[1] + ',' + this.casernes[0].coord[0] + ';' + this.flammes[1].coord[1] + ',' + this.flammes[1].coord[0] + '?steps=true&geometries=geojson&access_token=pk.eyJ1IjoiZGRkZGQ0NCIsImEiOiJjazRtdm01NHQwOG14M21wNWdsdXY1djhqIn0.GuEePwUCtxgMwBMdjBy7WA')
-    const data = await response.json();
-    const route = data.routes[0].geometry.coordinates;
-    this.geojson = {
-      
-      features: [{
-        type: 'Feature',
-        properties: {},
-      geometry: {
-        type: 'LineString',
-        coordinates: route
-      }
-      }],
-    };
-    this.loading = false;
+  beforeMount() {
+    let depart = [this.casernes[0].coord[0], this.casernes[0].coord[1]];
+    let arrivee = [this.flammes[1].coord[0], this.flammes[1].coord[1]];
+    this.calculItineraire(depart, arrivee)
+  },
+  methods: {
+    async calculItineraire(pointDepart, pointArrivee) {
+      this.loading = true;
+      const urlApiItineraire = `https://api.mapbox.com/directions/v5/mapbox/cycling/${pointDepart[1]},${pointDepart[0]};${pointArrivee[1]},${pointArrivee[0]}?steps=true&geometries=geojson&access_token=pk.eyJ1IjoiZGRkZGQ0NCIsImEiOiJjazRtdm01NHQwOG14M21wNWdsdXY1djhqIn0.GuEePwUCtxgMwBMdjBy7WA`;
+      const response = await fetch(urlApiItineraire)
+      const data = await response.json();
+      const route = data.routes[0].geometry.coordinates;
+      this.geojson = {
+        
+        features: [{
+          type: 'Feature',
+          properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: route
+        }
+        }],
+      };
+      this.loading = false;
+    }
   }
 };
 </script>
