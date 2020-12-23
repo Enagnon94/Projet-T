@@ -1,7 +1,7 @@
 <template>
   <div id="carte">
     <l-map
-      :center="[45.74, 4.85]"
+      :center="centreCarte"
       :min-zoom="10"
       :zoom="15"
       :max-bounds="zoneRestreinte"
