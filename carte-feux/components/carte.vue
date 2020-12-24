@@ -42,7 +42,7 @@ export default {
       required: false,
       default: () => [
         { rayon: 1, intensite: 1, coord: [45.74, 4.85] },
-        { rayon: 3, intensite: 1, coord: [45.74, 4.852] },
+        { rayon: 3, intensite: 1, coord: [45.74, 4.89] },
       ],
     },
     casernes: { type: Array, required: false },
@@ -53,8 +53,8 @@ export default {
       urlTuiles:
         "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?fresh=true&title=copy&access_token=pk.eyJ1IjoiZGRkZGQ0NCIsImEiOiJjazRtdm01NHQwOG14M21wNWdsdXY1djhqIn0.GuEePwUCtxgMwBMdjBy7WA",
       zoneRestreinte: [
-        [45.7, 4.84],
-        [45.8, 4.88],
+        [45.7, 4.8],
+        [45.8, 4.9],
       ],
       attribution: '&copy; <a href="https://docs.mapbox.com/api/">Mapbox</a>',
       iconFlamme: "/feu.svg",
