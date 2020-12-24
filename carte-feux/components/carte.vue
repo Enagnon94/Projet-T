@@ -2,7 +2,7 @@
   <div id="carte">
     <l-map
       :center="centreCarte"
-      :min-zoom="10"
+      :min-zoom="12"
       :zoom="15"
       :max-bounds="zoneRestreinte"
     >
@@ -18,6 +18,11 @@
         <l-marker v-for="(caserne, c) in casernes" ref="caserne" :lat-lng="caserne.coord" :key="'caserne'+c">
           <l-popup>{{caserne.name}}</l-popup>
           <l-icon :iconUrl="iconCaserne" :iconSize="[60, 40]"></l-icon>
+        </l-marker>
+
+        <l-marker v-for="(camion, c) in camions" ref="camion" :lat-lng="camion.coord" :key="'camion'+c">
+          <l-popup>{{camion.name}}</l-popup>
+          <l-icon :iconUrl="iconCamion" :iconSize="[60, 40]"></l-icon>
         </l-marker>
         
     </l-map>
@@ -48,13 +53,14 @@ export default {
       urlTuiles:
         "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?fresh=true&title=copy&access_token=pk.eyJ1IjoiZGRkZGQ0NCIsImEiOiJjazRtdm01NHQwOG14M21wNWdsdXY1djhqIn0.GuEePwUCtxgMwBMdjBy7WA",
       zoneRestreinte: [
-        [45, 4.8],
-        [46, 4.9],
+        [45.7, 4.84],
+        [45.8, 4.88],
       ],
       attribution: '&copy; <a href="https://docs.mapbox.com/api/">Mapbox</a>',
-      iconFlamme: "http://cdn.onlinewebfonts.com/svg/img_267353.svg",
+      iconFlamme: "/feu.svg",
       iconCaserne: "https://www.flaticon.com/de/premium-icon/icons/svg/3211/3211981.svg",
       iconCaserne2: "https://www.flaticon.com/de/premium-icon/icons/svg/3211/3211981.svg",
+      iconCamion: "/Fire_truck.svg",
       coefficientIconSize: "20",
       itineraire: null,
       centreCarte: [45.74, 4.85]
