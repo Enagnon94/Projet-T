@@ -60,11 +60,13 @@ export default {
       centreCarte: [45.74, 4.85]
     };
   },
-  beforeMount() { 
-    let depart = [this.casernes[0].coord[0], this.casernes[0].coord[1]];
-    let arrivee = [this.flammes[1].coord[0], this.flammes[1].coord[1]];
-    
-    this.getItineraire(depart, arrivee);
+  mounted() {
+    this.$nextTick(() => {
+      let depart = [this.casernes[0].coord[0], this.casernes[0].coord[1]];
+      let arrivee = [this.flammes[1].coord[0], this.flammes[1].coord[1]];
+      
+      this.getItineraire(depart, arrivee);
+    })
   },
   methods: {
     async getItineraire(depart, arrivee) {
