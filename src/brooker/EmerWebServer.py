@@ -1,7 +1,10 @@
+## Emergency Web Server##
+## En écoute, s'il recoit un message par UART du dataCollector, il le traite et le publie en MQTT ##
+
 import paho.mqtt.client as mqtt
 
 client = mqtt.Client()
-client._client_id = "0"
+client._client_id = "EmerWebServ"
 
 client.connect(host="127.0.0.1", port=1883, keepalive=60, bind_address='', bind_port=0,  properties=None,)
 #client.loop_start()              # cree un thread pour la comm
