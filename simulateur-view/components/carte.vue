@@ -19,7 +19,6 @@
 
 <script>
 import "leaflet/dist/leaflet.css";
-import "leaflet.markercluster/dist/MarkerCluster.css";
 import { mapActions, mapMutations, mapGetters } from "vuex";
 
 export default {
