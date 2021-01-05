@@ -1,0 +1,20 @@
+{
+  "Carte": {
+    "description": "Auto imported from components/carte.vue"
+  },
+  "LazyCarte": {
+    "description": "Auto imported from components/carte.vue"
+  },
+  "InfoSimul": {
+    "description": "Auto imported from components/infoSimul.vue"
+  },
+  "LazyInfoSimul": {
+    "description": "Auto imported from components/infoSimul.vue"
+  },
+  "Logo": {
+    "description": "Auto imported from components/Logo.vue"
+  },
+  "LazyLogo": {
+    "description": "Auto imported from components/Logo.vue"
+  }
+}

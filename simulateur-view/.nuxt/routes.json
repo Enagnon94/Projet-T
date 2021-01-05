@@ -1,0 +1,16 @@
+[
+  {
+    "name": "ecran",
+    "path": "/ecran",
+    "component": "C:\\\\Users\\\\mmze\\\\Documents\\\\essai-cookie-banner\\\\nuxt-carte\\\\Projet-Transversal-4RC\\\\carte-feux\\\\pages\\\\ecran.vue",
+    "chunkName": "pages/ecran",
+    "_name": "_328bcb97"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "C:\\\\Users\\\\mmze\\\\Documents\\\\essai-cookie-banner\\\\nuxt-carte\\\\Projet-Transversal-4RC\\\\carte-feux\\\\pages\\\\index.vue",
+    "chunkName": "pages/index",
+    "_name": "_1d138528"
+  }
+]
