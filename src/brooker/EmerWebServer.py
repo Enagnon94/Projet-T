@@ -3,6 +3,7 @@
 
 import paho.mqtt.client as mqtt
 import serial
+import mysql.connector
 
 def init_uart():
                    # ser = serial.Serial(SERIALPORT, BAUDRATE)
@@ -30,13 +31,19 @@ def init_uart():
 
 
 if __name__ == '__main__':
-        SERIALPORT = "/dev/ttyACM0"                             # port pour comm. UART
-        BAUDRATE = 115200
-        ser = serial.Serial()
-        init_uart()
+        # SERIALPORT = "/dev/ttyACM0"                             # port pour comm. UART
+        # BAUDRATE = 115200
+        # ser = serial.Serial()
+        # init_uart()
+
+    # mydb = mysql.connector.connect(host="localhost", user="Enagnon", passwd="bdd", database="ProjetT",)
+    # print("Connected to BDD")
+    # mycursor = mydb.cursor()
 
      #   while True:
                 # data_str = ecoute()   # ecoute UART
+                if data_str:
+                    print(data_str)
 
 
         client = mqtt.Client()

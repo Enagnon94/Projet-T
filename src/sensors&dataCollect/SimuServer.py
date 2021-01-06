@@ -2,19 +2,8 @@
 import serial
 import time
 import mysql.connector
-import argparse
-import signal
 import sys
-import socket
-import socketserver
-import threading
-
-HOST = "192.168.1.89"
-UDP_PORT = 9000
-
-MICRO_COMMANDS = ["TL", "LT"]
-
-LAST_VALUE = ""
+from time import sleep
 
 
 def initUART():
@@ -41,36 +30,14 @@ def initUART():
 
 
 def sendUARTMessage(msg):
-    message_bytes = bytes(msg, 'utf-8')
-    ser.write(message_bytes)
-    print("Message <" + msg + "> sent to micro-controller.")
+    if isinstance(msg,str):
+        message_bytes = bytes(msg, 'utf-8')
+        ser.write(message_bytes)
+        print("Message <" + msg + "> sent to micro-controller.")
+    else:    
+        ser.write(msg)
+        print("Message <" + (msg, 'utf-8') + "> sent to micro-controller.")
 
-
-def ecoute():                                    # ecoute les échanges UART et renvoi les donnees recues
-    data = ser.readline()
-    data = data[0:len(data)-2]
-    data = data[1:len(data)-2]
-    data = str(data).replace("\"","")
-    data = str(data).replace("\'","")
-    data = str(data).replace("b","",1)
-   # print(data)
-    return str(data)                          
-
-
-def ExtractData(data_str):                       # extrait les donnees recu par UART 
-    data_str = data_str.split(',') 
-    print(data_str)
-    nomCapteur = "."
-    id_= temp = lum = 0
-    if len(data_str) > 3 :
-        nomCapteur = data_str[0]
-        id_ = int(data_str[2])
-        mesure = data_str[3]
-        mesure = mesure.split("-")
-        temp = int(mesure[0])
-        lum = int(mesure[1])
-    data = [nomCapteur,id_,temp, lum]           # renvoi un tableau contenant les donnees extraites 
-    return data
 
 def EnregistrementBdd(nom,id_,temp,lum,ordre):    # Enregistrement et suppression donnees en bdd
     sqlInsertInto = "INSERT INTO Data VALUES (%s, %s, %s, %s, %s);"         # requete permettant d'enregistre une donnee
@@ -91,42 +58,47 @@ def EnregistrementBdd(nom,id_,temp,lum,ordre):    # Enregistrement et suppressio
     mydb.commit()                                  # valide la requete
 
 
-
-
+def recuperationDonneeBDD():
+    sqlSelectAll = "SELECT X, Y, Intensité FROM Capteur"         # requete permettant de recuperer les donnees
+    mycursor.execute(sqlSelectAll)                                          # compte le nb de ligne dans la table
+    resultat = mycursor.fetchall()
+    
+    if resultat :      
+        print("Transmission BDD to MicroBit...")
+        # sendUARTMessage("Debut")
+        # sleep(15)
+        for val in list(resultat):
+            if val:
+                val = str(val)
+                sendUARTMessage(val)
+        print("Fin")
+        
+    
+    
 if __name__ == '__main__':
 
     SERIALPORT = "/dev/ttyACM0"
     BAUDRATE = 115200
     ser = serial.Serial()
     initUART()
-    mydb = mysql.connector.connect(
-        host="localhost", user="Enagnon", passwd="bdd", database="IoT",)
+
+    mydb = mysql.connector.connect(host="localhost", user="Enagnon", passwd="bdd", database="ProjetT",)
     print("Connected to BDD")
     mycursor = mydb.cursor()
-    server = ThreadedUDPServer((HOST, UDP_PORT), ThreadedUDPRequestHandler)
-    server_thread = threading.Thread(target=server.serve_forever)
-    server_thread.daemon = True
+    
+    while 1:
+        
+    
+        recuperationDonneeBDD()
+        sleep(10)
+        # lecture donnee en BDD     
+        # if data_str:
+        #     data = ExtractData(data_str)
+        #     nomCapteur = data[0]
+        #     id_ = data[1]
+        #     temp = data[2]
+        #     lum = data[3]
+        #     EnregistrementBdd(nomCapteur,id_,temp,lum,"TL")                
+        #     LAST_VALUE = data_str
 
-    try:
-        server_thread.start()
-        print("Server started at {} port {}".format(HOST, UDP_PORT))
-
-        while 1:
-            data_str = ecoute()   # ecoute UART
-            
-            if data_str:
-                data = ExtractData(data_str)
-                nomCapteur = data[0]
-                id_ = data[1]
-                temp = data[2]
-                lum = data[3]
-                EnregistrementBdd(nomCapteur,id_,temp,lum,"TL")                
-                LAST_VALUE = data_str
-
-    except (KeyboardInterrupt, SystemExit):
-        server.shutdown()
-        server.server_close()
-        ser.close()
-        print("Fin\n")
-        exit()
  

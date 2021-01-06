@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
 from influxdb_client import InfluxDBClient,Point, WritePrecision
-from influxdb_client.client.write_api import SYNCHRONOUS
+from influxdb_client.client.write_api import SYNCHRONOUS, ASYNCHRONOUS
 import logging
 import json
 ## possibilité de lancer un brooker shell par python
@@ -28,11 +28,17 @@ def on_message(client, userdata, message):
         data = "test"
         data = data.encode('utf-8')
         print(message.topic+""+str(message.payload))
-        client_influxDB = InfluxDBClient(url=INFLUXDB_ADDRESS,token=TOKEN)
+
+        client_influxDB = InfluxDBClient(url=INFLUXDB_ADDRESS,token=TOKEN, org=ORG)
         write_api = client_influxDB.write_api(write_options=SYNCHRONOUS)
-        data = InfluxDBClient
-        #influxdb_client.Point("Capteur").tag("ID","c1").field("temperature",25)
-        write_api.write(bucket=BUCKET, org=ORG, record=data)
+        for a in range (5):
+                b=a+10
+                requete = "Temperature,Capteur="+str(b)+" valeur="+str((a+1))
+                write_api.write(bucket=BUCKET, org=ORG,record=[requete])
+               
+                # write_api.write(bucket=BUCKET, org=ORG,record=["Capteur,Id=11 20"])
+        # write_api.write(bucket=BUCKET, org=ORG, record=Point("Capteur").tag("Id","1").field("Temp",25).field("Lum",20).time(1))
+        # write_api.write(bucket=BUCKET, org=ORG,record=[{"measurement": "Capteur", "tags": {"location": "C1"}, "fields": {"Temp": 25, "lum":30}, "time": 1}])
 
 def on_disconnect(client, userdata,rc=0):
     logging.debug("DisConnected result code "+str(rc))

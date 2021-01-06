@@ -1,30 +1,21 @@
-
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class MySql {
-        // Connect to your database.
-        // Replace server name, username, and password with your credentials
-        public static void main(String[] args) {
-            String connectionUrl =
-                    "jdbc:sqlserver://localhost:3306;"
-                            + "database=IoT;"
-                            + "user=Enagnon;"
-                            + "password=bdd;"
-                            + "encrypt=true;"
-                            + "trustServerCertificate=false;"
-                            + "loginTimeout=30;";
-    
-            try (Connection connection = DriverManager.getConnection(connectionUrl);) {
-                System.out.println("Connection !!!");
-                // Code here.
+
+    public static void main(String[] args) {
+
+        String connectionUrl = "jdbc:sqlserver://localhost:3306;databaseName=IoT;user=Enagnon;password=bdd";
+
+        try {
+            // Load SQL Server JDBC driver and establish connection.
+            System.out.print("Connecting to SQL Server ... ");
+            try (Connection connection = DriverManager.getConnection(connectionUrl)) {
+                System.out.println("Done.");
             }
-            // Handle any errors that may have occurred.
-            catch (SQLException e) {
-                System.out.println("Error");
-                e.printStackTrace();                
-            }
+        } catch (Exception e) {
+            System.out.println();
+            e.printStackTrace();
         }
     }
-    
+}
