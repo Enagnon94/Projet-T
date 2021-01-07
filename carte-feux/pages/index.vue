@@ -7,7 +7,7 @@
       </h1>
       <div class="links">
         <a
-          href="http://localhost:3000/ecran"
+          href="/ecran"
           rel="noopener noreferrer"
           class="button--green"
         >
