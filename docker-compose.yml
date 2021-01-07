@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+    db:
+        image: mysql:8.0.19
+        restart: always
+        volumes:
+            - C:/Users/mmze/Documents/dock/mysql:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_USER=debian-sys-maint
+            - MYSQL_PASSWORD=aR7RIRZbiUZw3dYk
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=webapp
+        networks:
+            - projet-tr
+    myadmin:
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        ports:
+            - "8080:80"
+        networks:
+            - projet-tr
+    emergency:
+        image: node:latest
+        command: "npm run dev"
+        environment:
+            HOST: 0.0.0.0
+            PORT: 3000
+        volumes:
+            - C:\Users\mmze\Documents\essai-cookie-banner\nuxt-carte\Projet-Transversal-4RC\carte-feux:/usr/src/app
+        working_dir: /usr/src/app
+        ports:
+            - "4000:3000"
+        networks:
+            - projet-tr
+    simulator:
+        image: node:latest
+        command: "npm run dev"
+        environment:
+            HOST: 0.0.0.0
+            PORT: 3000
+        volumes:
+            - C:\Users\mmze\Documents\essai-cookie-banner\nuxt-carte\Projet-Transversal-4RC\simulateur-view:/usr/src/app
+        working_dir: /usr/src/app
+        ports:
+            - "4001:3000"
+        networks:
+            - projet-tr
+        
+networks:
+  projet-tr:
