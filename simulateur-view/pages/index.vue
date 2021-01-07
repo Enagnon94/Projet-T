@@ -2,16 +2,14 @@
   <div class="container">
     <div>
       <Logo />
-      <h1 class="title">
-        carte-feux
-      </h1>
+      <h1 class="title">Simulateur</h1>
       <div class="links">
         <a
-          href="http://localhost:3000/ecran"
+          href="/ecran"
           rel="noopener noreferrer"
           class="button--green"
         >
-        Carte
+          Carte
         </a>
       </div>
     </div>
@@ -19,7 +17,7 @@
 </template>
 
 <script>
-export default {}
+export default {};
 </script>
 
 <style>
