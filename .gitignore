@@ -1,0 +1,7 @@
+node_modules
+carte-feux/node_modules
+simulateur-view/node_modules
+simulateur-view/package-lock.json
+carte-feux/package-lock.json
+carte-feux/.nuxt
+simulateur-view/.nuxt
