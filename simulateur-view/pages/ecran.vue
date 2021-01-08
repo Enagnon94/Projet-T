@@ -18,12 +18,19 @@ export default {
     carte,
     infoSimul
   },
-  props: {
-        flammes: {type: Array, required: false, default: () => [{rayon: 1, intensite: 1, coord: [45.7412, 4.836]}, {rayon: 2, intensite: 1, coord: [45.74, 4.852]}] },
-    },
   data() {
     return {
-
+      flammes: [{rayon: 1, intensite: 1, coord: [45.7412, 4.836]}, {rayon: 2, intensite: 1, coord: [45.74, 4.852]}]
+    }
+  },
+  async mounted() {
+    this.flammes = await this.getCoord()
+  },
+  methods: {
+    async getCoord() {
+      const res = await this.$axios.get("http://localhost:5002/flammes").then((response) => {return response.data});
+      this.coor = res;
+      return res;
     }
   }
 }
