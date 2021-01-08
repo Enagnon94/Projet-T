@@ -5,3 +5,5 @@ simulateur-view/package-lock.json
 carte-feux/package-lock.json
 carte-feux/.nuxt
 simulateur-view/.nuxt
+carte-feux/.nuxt/*
+simulateur-view/.nuxt/*
