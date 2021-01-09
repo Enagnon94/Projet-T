@@ -58,7 +58,7 @@ def EnregistrementBdd(nom,id_,temp,lum,ordre):    # Enregistrement et suppressio
     mydb.commit()                                  # valide la requete
 
 
-def recuperationDonneeBDD():
+def GetSendBddData():
     sqlSelectAll = "SELECT X, Y, Intensité FROM Capteur"         # requete permettant de recuperer les donnees
     mycursor.execute(sqlSelectAll)                                          # compte le nb de ligne dans la table
     resultat = mycursor.fetchall()
@@ -89,7 +89,7 @@ if __name__ == '__main__':
     while 1:
         
     
-        recuperationDonneeBDD()
+        GetSendBddData()
         sleep(10)
         # lecture donnee en BDD     
         # if data_str:
