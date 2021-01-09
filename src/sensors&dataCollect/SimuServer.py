@@ -4,6 +4,7 @@ import time
 import mysql.connector
 import sys
 from time import sleep
+import random
 
 
 def initUART():
@@ -58,21 +59,33 @@ def EnregistrementBdd(nom,id_,temp,lum,ordre):    # Enregistrement et suppressio
     mydb.commit()                                  # valide la requete
 
 
-def GetSendBddData():
-    sqlSelectAll = "SELECT X, Y, Intensité FROM Capteur"         # requete permettant de recuperer les donnees
-    mycursor.execute(sqlSelectAll)                                          # compte le nb de ligne dans la table
-    resultat = mycursor.fetchall()
-    
-    if resultat :      
-        print("Transmission BDD to MicroBit...")
-        # sendUARTMessage("Debut")
-        # sleep(15)
-        for val in list(resultat):
-            if val:
-                val = str(val)
-                sendUARTMessage(val)
-        print("Fin")
+def bddToMicro():
+    for i in range(1):
+        sqlSelectAll = "SELECT X, Y, Intensité FROM Capteur WHERE X = "+str(i+1)+";"         # requete permettant de recuperer les donnees
+        mycursor.execute(sqlSelectAll)                                          # compte le nb de ligne dans la table
+        resultat = mycursor.fetchall()
         
+        if resultat :      
+            print("Transmission BDD to MicroBit...")
+            data = ""
+            for val in list(resultat):
+                if val:
+                    var = str("").join(str(val))
+                    data += var            
+            sendUARTMessage(data)
+            print("Fin")
+
+
+def remplirBDD():
+    nb=1
+    for m in range(10):
+        for i in range(6):
+            r = random.randint(0,9)
+            sqlReq="INSERT INTO Capteur (IdCapteur, X, Y, Intensité) VALUES("+str(nb)+","+str(m+1)+", "+str(i+1)+", "+str(r)+");"
+            print(sqlReq)
+            nb+=1
+            mycursor.execute(sqlReq)      
+    mycursor.execute("COMMIT;")              
     
     
 if __name__ == '__main__':
@@ -87,10 +100,15 @@ if __name__ == '__main__':
     mycursor = mydb.cursor()
     
     while 1:
-        
-    
-        GetSendBddData()
+   
+        bddToMicro()
+        data=ser.readline()
+        if data:
+            print(data)
         sleep(10)
+
+
+
         # lecture donnee en BDD     
         # if data_str:
         #     data = ExtractData(data_str)
