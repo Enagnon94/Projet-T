@@ -4,6 +4,8 @@
 # import paho.mqtt.client as mqtt
 import serial
 import mysql.connector
+from time import sleep
+
 
 def init_uart():
                    # ser = serial.Serial(SERIALPORT, BAUDRATE)
@@ -28,8 +30,8 @@ def init_uart():
         exit()
 
 def ecoute():
-    data=ser.readline()
-    return str(data)
+    data=ser.read()
+    return str(data,'UTF-8')
 
 
 
@@ -48,6 +50,7 @@ if __name__ == '__main__':
                 data_str = ecoute()   # ecoute UART
                 if data_str:
                     print(data_str)
+                    
 
 
         # client = mqtt.Client()
