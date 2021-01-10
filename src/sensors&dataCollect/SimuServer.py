@@ -93,8 +93,7 @@ def ecoute():
     data=ser.read()
     return str(data)
 
-
-
+    
 if __name__ == '__main__':
 
     SERIALPORT = "/dev/ttyACM0"

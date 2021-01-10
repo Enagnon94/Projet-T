@@ -1,13 +1,14 @@
 ## Emergency Web Server##
 ## En écoute, s'il recoit un message par UART du dataCollector, il le traite et le publie en MQTT ##
 
-# import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt
 import serial
 import mysql.connector
 from time import sleep
+import re
 
 
-def init_uart():
+def initUART():
                    # ser = serial.Serial(SERIALPORT, BAUDRATE)
     ser.port = SERIALPORT
     ser.baudrate = BAUDRATE
@@ -29,29 +30,81 @@ def init_uart():
         print("Serial {} port not available".format(SERIALPORT))
         exit()
 
-def ecoute():
-    data=ser.read()
+def ecouteUART():
+    data=ser.readline()
     return str(data,'UTF-8')
 
+def remplirBDD():
+    nb=1
+    for m in range(10):
+        for i in range(6):
+            r = 0 # random.randint(0,9)
+            sqlReq="INSERT INTO Feux (IdCapteur, X, Y, Intensité) VALUES("+str(nb)+","+str(m+1)+", "+str(i+1)+", "+str(r)+");"
+            print(sqlReq)
+            nb+=1
+            mycursor.execute(sqlReq)      
+    mycursor.execute("COMMIT;")              
+    
+
+def EnregistrementBdd(data):
+    print(len(data))
+    for i in range(6):   
+        if (len(data) == 18 ):
+            sqlInsert = "Update Feux set Intensité="+str(data[3*i+2])+" where X="+str(data[3*i])+" and Y="+str(data[3*i+1])+";"
+            print(sqlInsert)
+            mycursor.execute(sqlInsert)
+            mycursor.execute("COMMIT;")
+    return
 
 
 if __name__ == '__main__':
         SERIALPORT = "/dev/ttyACM0"                             # port pour comm. UART
         BAUDRATE = 115200
         ser = serial.Serial()
-        init_uart()
+        initUART()
+        liste = []
 
-    # mydb = mysql.connector.connect(host="localhost", user="Enagnon", passwd="bdd", database="ProjetT",)
-    # print("Connected to BDD")
-    # mycursor = mydb.cursor()
+        mydb = mysql.connector.connect(host="localhost", user="Enagnon", passwd="bdd", database="ProjetTEmergency",)
+        print("Connected to BDD")
+        mycursor = mydb.cursor()
+    #   remplirBDD()
 
-        while True:
-                #
-                data_str = ecoute()   # ecoute UART
-                if data_str:
-                    print(data_str)
+        client = mqtt.Client()
+        client._client_id = "EmerWebServ"
+
+        client.connect(host="127.0.0.1", port=1883, keepalive=60, bind_address='', bind_port=0,  properties=None,)
+        #client.loop_start() 
+
+        while True:                         
+            data = ecouteUART()   # ecoute UART
+        
+            if data:              
+                liste.clear()
+                for a in data:
+                    if a.isdigit():
+                        liste.append(a)
+                if len(liste) == 18:
+                    EnregistrementBdd(liste)
+                if len(liste) == 24:
+                    liste.pop(0)
+                    liste.pop(3)
+                    liste.pop(6)
+                    liste.pop(9)                 
+                    liste.pop(12)
+                    liste.pop(15) 
+                    liste[0] = 10
+                    liste[3] = 10
+                    liste[6] = 10
+                    liste[9] = 10
+                    liste[12] = 10
+                    liste[15] = 10   
+                    print(liste)
+                    EnregistrementBdd(liste)
+                print(liste)
+                mm = client.publish(topic="Test/Capteur", payload="Kwabo, ceci est un test", qos=1,retain=False)
+
+             
                     
-
 
         # client = mqtt.Client()
         # client._client_id = "EmerWebServ"
