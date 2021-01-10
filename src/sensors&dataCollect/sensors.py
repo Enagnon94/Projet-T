@@ -2,9 +2,9 @@
 from microbit import *
 import radio
 import os
-
-radio.config(group=23)
 radio.on()
+radio.config(group=23)
+radio.config(length=80)
 uart.init(baudrate=115200, bits=8, parity=None, stop=1)
 CLE = 10
 ID_CAPTEUR = 11
@@ -42,15 +42,11 @@ while True:
     
     if (uart.any()):                                # ecoute uart
         msg = uart.read()                     # recuperer donnees(bytes) uart 
-        data=BuildMessage("DATA",ID_PASSERELLE,ID_CAPTEUR,msg)
+        data = str(msg,'UTF-8')
         print(data)
-        radio.send(data)   
-        
-   #     print(msg)
-        
-    #    data=Encrypt(str(msg,'utf-8'),CLE)    # encrypt les donnees
-    #    tosend = BuildMessage("DATA",ID_PASSERELLE,ID_CAPTEUR,data)
-    #    radio.send(tosend)                    #envoi les donnees encryptées(str) et formatées
+      #  data=Encrypt(data,CLE) 
+        radio.send(BuildMessage("DATA",ID_PASSERELLE,ID_CAPTEUR,data))  
+        print(data)
         EnCours()
                 
     display.scroll("...")

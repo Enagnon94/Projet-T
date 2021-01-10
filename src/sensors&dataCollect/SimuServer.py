@@ -60,21 +60,22 @@ def EnregistrementBdd(nom,id_,temp,lum,ordre):    # Enregistrement et suppressio
 
 
 def bddToMicro():
-    for i in range(1):
+    for i in range(10):
         sqlSelectAll = "SELECT X, Y, Intensité FROM Capteur WHERE X = "+str(i+1)+";"         # requete permettant de recuperer les donnees
         mycursor.execute(sqlSelectAll)                                          # compte le nb de ligne dans la table
         resultat = mycursor.fetchall()
         
-        if resultat :      
+        if resultat:      
             print("Transmission BDD to MicroBit...")
             data = ""
             for val in list(resultat):
                 if val:
                     var = str("").join(str(val))
                     data += var            
-            sendUARTMessage(data)
+            sendUARTMessage((data+"\n"))
+            sleep(3)
             print("Fin")
-
+    
 
 def remplirBDD():
     nb=1
@@ -87,7 +88,13 @@ def remplirBDD():
             mycursor.execute(sqlReq)      
     mycursor.execute("COMMIT;")              
     
-    
+
+def ecoute():
+    data=ser.read()
+    return str(data)
+
+
+
 if __name__ == '__main__':
 
     SERIALPORT = "/dev/ttyACM0"
@@ -102,21 +109,10 @@ if __name__ == '__main__':
     while 1:
    
         bddToMicro()
-        data=ser.readline()
-        if data:
-            print(data)
-        sleep(10)
-
-
-
-        # lecture donnee en BDD     
-        # if data_str:
-        #     data = ExtractData(data_str)
-        #     nomCapteur = data[0]
-        #     id_ = data[1]
-        #     temp = data[2]
-        #     lum = data[3]
-        #     EnregistrementBdd(nomCapteur,id_,temp,lum,"TL")                
-        #     LAST_VALUE = data_str
+        data_str = ecoute()   # ecoute UART
+        if data_str:
+            print(data_str)
+        sleep(1)
+    
 
  
