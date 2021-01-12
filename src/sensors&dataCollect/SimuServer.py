@@ -77,7 +77,7 @@ def bddToMicro():
             print("Fin")
     
 
-def remplirBDD():
+def initDataBdd():
     nb=1
     for m in range(10):
         for i in range(6):
@@ -89,11 +89,23 @@ def remplirBDD():
     mycursor.execute("COMMIT;")              
     
 
+def remplirBDD():
+    nb=1
+    for m in range(10):
+        for i in range(6):
+            r = random.randint(0,100)
+            sqlReq = "Update Feux set Intensité="+str(r)+" where X="+str(m+1)+" and Y="+str(i+1)+";"       
+            nb+=1
+            mycursor.execute(sqlReq)   
+            print("Donnees bdd")   
+    mycursor.execute("COMMIT;")              
+    
+
 def ecoute():
     data=ser.read()
     return str(data)
 
-    
+
 if __name__ == '__main__':
 
     SERIALPORT = "/dev/ttyACM0"
@@ -104,9 +116,9 @@ if __name__ == '__main__':
     mydb = mysql.connector.connect(host="localhost", user="Enagnon", passwd="bdd", database="ProjetT",)
     print("Connected to BDD")
     mycursor = mydb.cursor()
-    
+   #  initDataBdd()
     while 1:
-   
+        remplirBDD()
         bddToMicro()
         data_str = ecoute()   # ecoute UART
         if data_str:

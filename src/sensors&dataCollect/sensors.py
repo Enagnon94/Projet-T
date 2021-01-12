@@ -6,7 +6,7 @@ radio.on()
 radio.config(group=23)
 radio.config(length=80)
 uart.init(baudrate=115200, bits=8, parity=None, stop=1)
-CLE = 10
+CLE = 1
 ID_CAPTEUR = 11
 ID_PASSERELLE = 1111
 
@@ -43,10 +43,8 @@ while True:
     if (uart.any()):                                # ecoute uart
         msg = uart.read()                     # recuperer donnees(bytes) uart 
         data = str(msg,'UTF-8')
-        print(data)
-      #  data=Encrypt(data,CLE) 
+        data=Encrypt(data,CLE) 
         radio.send(BuildMessage("DATA",ID_PASSERELLE,ID_CAPTEUR,data))  
-        print(data)
         EnCours()
                 
     display.scroll("...")
