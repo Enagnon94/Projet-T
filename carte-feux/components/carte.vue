@@ -9,17 +9,17 @@
       <l-geo-json :geojson="itineraire"> 
       </l-geo-json>
 
-        <l-marker v-for="(flamme, f) in flammes" ref="flamme" :lat-lng="flamme.coord" :key="'flamme'+f">
+        <l-marker v-for="(flamme, f) in flammes" ref="flamme" :lat-lng="conversion([flamme.X, flamme.Y], zoneRestreinte)" :key="'flamme'+f">
           <l-popup>ça brule ici</l-popup>
-          <l-icon :iconUrl="iconFlamme" :iconSize="[flamme.rayon*coefficientIconSize, flamme.rayon*coefficientIconSize ]"></l-icon>
+          <l-icon :iconUrl="iconFlamme" :iconSize="[2*coefficientIconSize, 2*coefficientIconSize ]"></l-icon>
         </l-marker>
 
-        <l-marker v-for="(caserne, c) in casernes" ref="caserne" :lat-lng="caserne.coord" :key="'caserne'+c">
+        <l-marker v-for="(caserne, c) in casernes" ref="caserne" :lat-lng="[conversion([caserne.X, caserne.Y], zoneRestreinte)]" :key="'caserne'+c">
           <l-popup>{{caserne.name}}</l-popup>
           <l-icon :iconUrl="iconCaserne" :iconSize="[60, 40]"></l-icon>
         </l-marker>
 
-        <l-marker v-for="(camion, c) in camions" ref="camion" :lat-lng="[1, 2]" :key="'camion'+c">
+        <l-marker v-for="(camion, c) in camions" ref="camion" :lat-lng="conversion([camion.X, camion.Y], zoneRestreinte)" :key="'camion'+c">
           <l-popup>{{camion.name}}</l-popup>
           <l-icon :iconUrl="iconCamion" :iconSize="[60, 40]"></l-icon>
         </l-marker>
@@ -43,7 +43,7 @@ export default {
       ],
     },
     casernes: { type: Array, required: false },
-    camions: { type: Array, required: false },
+    camions: {type: Array, required: false, default: () => [{name: "Rescue Truck", coord: [45.746, 4.856]}, {name: "Tric Truck", coord: [45.748, 4.858]}]}
   },
   data() {
     return {
@@ -66,31 +66,13 @@ export default {
   beforeMount() {
     console.log(this.camions);console.log("Carte.vue - this.camions");
   },
-  mounted() {
-    this.$nextTick(() => {
-      let depart = [this.casernes[0].coord[0], this.casernes[0].coord[1]];
-      let arrivee = [this.flammes[1].coord[0], this.flammes[1].coord[1]];
-      
-      this.getItineraire(depart, arrivee);
-    })
-  },
   methods: {
     async getItineraire(depart, arrivee) {
       this.itineraire = await this.$calculItineraire(depart, arrivee).then(response => { return response})
     },
-    conversion(coord, zoneRestreinte) {
-      //return this.$conversion(coord, zoneRestreinte);
-      const originZone = zoneRestreinte[0];
-        const finZone = zoneRestreinte[1];
-        const intervalGridX = 10;
-        const intervalGridY = 10;
-        let intervalZoneX = finZone[1] - originZone[1]
-        let intervalZoneY = finZone[0] - originZone[0];
-
-        let newCoordX = (coord[0]/intervalGridX) * intervalZoneX
-        let newCoordY = (coord[10]/intervalGridY) * intervalZoneY
-
-        return [newCoordX, newCoordY]
+    conversion(gridCoord, zoneRestreinte) {
+        const testc = this.$conversion(gridCoord, zoneRestreinte);
+        return testc;    
     }
   }
 };

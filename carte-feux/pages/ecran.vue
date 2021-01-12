@@ -5,7 +5,7 @@
 
     <div id="simul">
       <carte :flammes="capteurs" :casernes="casernes" :camions="camions" ></carte>
-      <info-simul :flammes="capteurs" :caserne="casernes" :camions="camions"></info-simul>
+      <info-simul :flammes="capteurs" :casernes="casernes" :camions="camions"></info-simul>
     </div>
   </div>
 </template>
@@ -27,6 +27,7 @@ export default {
   },
   mounted() {
     this.getInfos();
+    this.getCapteurs();
   },
   methods: {
     async getInfos() {
@@ -37,6 +38,13 @@ export default {
       this.casernes = infos.casernes;
       this.camions = infos.camions;
       console.log(this.camions);console.log("infos.camions");
+    },
+    async getCapteurs() {
+      const infos = await this.$axios
+      .get('http://localhost:5002/simul')
+      .then(response => response.data)
+
+      this.capteurs = infos.capteurs;
     }
   }
 }

@@ -4,11 +4,13 @@ export default function ({ $axios }, inject) {
         const finZone = zoneRestreinte[1];
         const intervalGridX = 10;
         const intervalGridY = 10;
-        let intervalZoneX = finZone[1] - originZone[1]
-        let intervalZoneY = finZone[0] - originZone[0];
+        let intervalZoneX = finZone[0] - originZone[0]
+        let intervalZoneY = finZone[1] - originZone[1];
+        console.log("gridCoor");console.log(gridCoord[1]);console.log("/gridCoor");
+        console.log(intervalZoneY);
 
-        let newCoordX = (gridCoord[0]/intervalGridX) * intervalZoneX
-        let newCoordY = (gridCoord[0]/intervalGridY) * intervalZoneY
+        let newCoordX = originZone[0] + (gridCoord[0]/intervalGridX) * intervalZoneX
+        let newCoordY = originZone[1] + (gridCoord[1]/intervalGridY) * intervalZoneY
 
         return [newCoordX, newCoordY]
     }

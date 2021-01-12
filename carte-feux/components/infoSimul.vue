@@ -4,7 +4,6 @@
         <ul v-for="(flamme, f) in flammes" :key="'infoFlamme'+f">
             <input type="checkbox" @change="displayFlamme">
                 Flamme {{f}} : 
-            </input>
             <li>Coordonnées : {{flamme.coord}}</li>
             <li>Rayon : {{flamme.rayon}}</li>
             <li>Intensité : {{flamme.intensite}}</li>
@@ -38,6 +37,7 @@ export default {
 #infoSimul {
   border-style: solid;
   border-color: darkblue;
+  overflow-y: scroll;
   p {
       width: max-content;
   }

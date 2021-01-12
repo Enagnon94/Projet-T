@@ -20,6 +20,7 @@ export default {
   plugins: [
     { src: '~/plugins/leaflet-imports.js', mode: 'client' },
     { src: '@/plugins/itineraire.js', mode: 'client' },
+    { src: '@/plugins/coordonnes.js', mode: 'client' }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
