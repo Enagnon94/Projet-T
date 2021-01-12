@@ -48,14 +48,33 @@ def remplirBDD():
 
 def EnregistrementBdd(data):
     print(len(data))
-    for i in range(6):   
-        if (len(data) == 18 ):
+    if (len(data) == 18 ):
+        for i in range(6):       
             sqlInsert = "Update Feux set Intensité="+str(data[3*i+2])+" where X="+str(data[3*i])+" and Y="+str(data[3*i+1])+";"
             print(sqlInsert)
             mycursor.execute(sqlInsert)
-            mycursor.execute("COMMIT;")
-    return
-
+        mycursor.execute("COMMIT;")    
+    
+def TraitementDonnee(data):
+    liste.clear()
+    for a in data:              
+        if a.isdigit():
+            liste.append(a)         # cree un string avec les donnees     
+        
+    if len(liste) == 24:            # cas où X = 10, retraitement du string
+        liste.pop(0)
+        liste.pop(3)
+        liste.pop(6)
+        liste.pop(9)                 
+        liste.pop(12)
+        liste.pop(15) 
+        liste[0] = 10
+        liste[3] = 10
+        liste[6] = 10
+        liste[9] = 10
+        liste[12] = 10
+        liste[15] = 10   
+    return liste
 
 if __name__ == '__main__':
         SERIALPORT = "/dev/ttyACM0"                             # port pour comm. UART
@@ -67,42 +86,25 @@ if __name__ == '__main__':
         mydb = mysql.connector.connect(host="localhost", user="Enagnon", passwd="bdd", database="ProjetTEmergency",)
         print("Connected to BDD")
         mycursor = mydb.cursor()
-    #   remplirBDD()
+    #    remplirBDD()
 
         client = mqtt.Client()
         client._client_id = "EmerWebServ"
 
         client.connect(host="127.0.0.1", port=1883, keepalive=60, bind_address='', bind_port=0,  properties=None,)
-        #client.loop_start() 
+        client.loop_start() 
 
         while True:                         
             data = ecouteUART()   # ecoute UART
         
-            if data:              
-                liste.clear()
-                for a in data:
-                    if a.isdigit():
-                        liste.append(a)
-                if len(liste) == 18:
-                    EnregistrementBdd(liste)
-                if len(liste) == 24:
-                    liste.pop(0)
-                    liste.pop(3)
-                    liste.pop(6)
-                    liste.pop(9)                 
-                    liste.pop(12)
-                    liste.pop(15) 
-                    liste[0] = 10
-                    liste[3] = 10
-                    liste[6] = 10
-                    liste[9] = 10
-                    liste[12] = 10
-                    liste[15] = 10   
-                    print(liste)
-                    EnregistrementBdd(liste)
+            if data:     
+                donnee = TraitementDonnee(data)  # traitement des donnees recues, mise au format            
+                if len(donnee) == 18:            # enregistrement en bdd si string de bonne longueur
+               #     EnregistrementBdd(donnee)
+                    mm = client.publish(topic="Test/Capteur", payload="".join(str(donnee)), qos=1,retain=False)
+   
                 print(liste)
-                mm = client.publish(topic="Test/Capteur", payload="Kwabo, ceci est un test", qos=1,retain=False)
-
+                
              
                     
 

@@ -89,15 +89,13 @@ def initDataBdd():
     mycursor.execute("COMMIT;")              
     
 
-def remplirBDD():
-    nb=1
+def remplirBDD():  
     for m in range(10):
         for i in range(6):
             r = random.randint(0,100)
             sqlReq = "Update Feux set Intensité="+str(r)+" where X="+str(m+1)+" and Y="+str(i+1)+";"       
-            nb+=1
             mycursor.execute(sqlReq)   
-            print("Donnees bdd")   
+    print("Donnees bdd")   
     mycursor.execute("COMMIT;")              
     
 
