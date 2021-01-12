@@ -40,4 +40,5 @@ export default function ({ $axios }, inject) {
     return res;
   }
   inject("calculItineraire", calculItineraire);
+  
 }

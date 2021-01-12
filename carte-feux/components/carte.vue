@@ -1,8 +1,7 @@
 <template>
   <div id="carte">
     <l-map
-      :center="centreCarte"
-      :min-zoom="12"
+      :min-zoom="15"
       :zoom="15"
       :max-bounds="zoneRestreinte"
     >
@@ -20,7 +19,7 @@
           <l-icon :iconUrl="iconCaserne" :iconSize="[60, 40]"></l-icon>
         </l-marker>
 
-        <l-marker v-for="(camion, c) in camions" ref="camion" :lat-lng="camion.coord" :key="'camion'+c">
+        <l-marker v-for="(camion, c) in camions" ref="camion" :lat-lng="[1, 2]" :key="'camion'+c">
           <l-popup>{{camion.name}}</l-popup>
           <l-icon :iconUrl="iconCamion" :iconSize="[60, 40]"></l-icon>
         </l-marker>
@@ -51,8 +50,8 @@ export default {
       urlTuiles:
         "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?fresh=true&title=copy&access_token=pk.eyJ1IjoiZGRkZGQ0NCIsImEiOiJjazRtdm01NHQwOG14M21wNWdsdXY1djhqIn0.GuEePwUCtxgMwBMdjBy7WA",
       zoneRestreinte: [
-        [45.7, 4.8],
-        [45.8, 4.9],
+        [45.735, 4.83],
+        [45.75, 4.86],
       ],
       attribution: '&copy; <a href="https://docs.mapbox.com/api/">Mapbox</a>',
       iconFlamme: "/feu.svg",
@@ -63,6 +62,9 @@ export default {
       itineraire: null,
       centreCarte: [45.74, 4.85]
     };
+  },
+  beforeMount() {
+    console.log(this.camions);console.log("Carte.vue - this.camions");
   },
   mounted() {
     this.$nextTick(() => {
@@ -75,6 +77,20 @@ export default {
   methods: {
     async getItineraire(depart, arrivee) {
       this.itineraire = await this.$calculItineraire(depart, arrivee).then(response => { return response})
+    },
+    conversion(coord, zoneRestreinte) {
+      //return this.$conversion(coord, zoneRestreinte);
+      const originZone = zoneRestreinte[0];
+        const finZone = zoneRestreinte[1];
+        const intervalGridX = 10;
+        const intervalGridY = 10;
+        let intervalZoneX = finZone[1] - originZone[1]
+        let intervalZoneY = finZone[0] - originZone[0];
+
+        let newCoordX = (coord[0]/intervalGridX) * intervalZoneX
+        let newCoordY = (coord[10]/intervalGridY) * intervalZoneY
+
+        return [newCoordX, newCoordY]
     }
   }
 };
