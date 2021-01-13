@@ -21,8 +21,10 @@ export default {
   data() {
     return {
       capteurs: [{rayon: 1, intensite: 1, coord: [45.7412, 4.836]}, {rayon: 2, intensite: 1, coord: [45.735, 4.83]}],
-      casernes: [{name: "Dami", coord: [45.7467, 4.856]}, {name: "Nami", coord: [45.748, 4.858]}],
-      camions: []
+      casernes: [],
+      camions: [],
+      intervalInfos: "",
+      intervalCapteurs: ""
     }
   },
   mounted() {
@@ -30,21 +32,22 @@ export default {
     this.getCapteurs();
   },
   methods: {
-    async getInfos() {
-      const infos = await this.$axios
-      .get('http://localhost:5002/emergency')
-      .then(response => response.data)
-
-      this.casernes = infos.casernes;
-      this.camions = infos.camions;
-      console.log(this.camions);console.log("infos.camions");
+    getInfos() {
+      console.log("kllll");
+      this.intervalInfos =  setInterval(() => {
+        this.$axios.get('http://localhost:5002/emergency', { progress: false }).then(response => {
+          this.casernes = response.data.casernes;
+          this.camions = response.data.camions;
+        })
+      }, 1000)
     },
     async getCapteurs() {
-      const infos = await this.$axios
-      .get('http://localhost:5002/simul')
-      .then(response => response.data)
-
-      this.capteurs = infos.capteurs;
+      this.intervalCapteurs = setInterval(() => { 
+        this.$axios.get('http://localhost:5002/simul', { progress: false }).then(response => {
+        this.capteurs = response.data.capteurs;
+        return response.data;
+        })
+      }, 1000);
     }
   }
 }

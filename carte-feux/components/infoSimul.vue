@@ -21,9 +21,9 @@ import "leaflet/dist/leaflet.css";
 
 export default {
     props: {
-        flammes: {type: Array, required: false, default: () => [{rayon: 1, intensite: 1, coord: [45.74, 4.85]}, {rayon: 1, intensite: 1, coord: [45.74, 4.852]}] },
-        casernes: {type: Array, required: false, default: () => [{name: "Dami", coord: [45.746, 4.856]}, {name: "Nami", coord: [45.748, 4.858]}]},
-        camions: {type: Array, required: false, default: () => [{name: "Rescue Truck", coord: [45.746, 4.856]}, {name: "Tric Truck", coord: [45.748, 4.858]}]}
+        flammes: {type: Array, required: false, default: () => [{rayon: 1, intensite: 1, X: 1, Y: 1}] },
+        casernes: {type: Array, required: false},
+        camions: {type: Array, required: false}
     },
     methods: {
         displayFlamme() {
@@ -38,6 +38,7 @@ export default {
   border-style: solid;
   border-color: darkblue;
   overflow-y: scroll;
+  margin-right: 10px;
   p {
       width: max-content;
   }

@@ -9,17 +9,17 @@
       <l-geo-json :geojson="itineraire"> 
       </l-geo-json>
 
-        <l-marker v-for="(flamme, f) in flammes" ref="flamme" :lat-lng="conversion([flamme.X, flamme.Y], zoneRestreinte)" :key="'flamme'+f">
+        <l-marker v-for="(flamme, f) in flammes" ref="flamme" :lat-lng="conversion2(flamme.X, flamme.Y)" :key="'flamme'+f">
           <l-popup>ça brule ici</l-popup>
           <l-icon :iconUrl="iconFlamme" :iconSize="[2*coefficientIconSize, 2*coefficientIconSize ]"></l-icon>
         </l-marker>
 
-        <l-marker v-for="(caserne, c) in casernes" ref="caserne" :lat-lng="[conversion([caserne.X, caserne.Y], zoneRestreinte)]" :key="'caserne'+c">
+        <l-marker v-for="(caserne, c) in casernes" ref="caserne" :lat-lng="conversion2(caserne.X, caserne.Y)" :key="'caserne'+c">
           <l-popup>{{caserne.name}}</l-popup>
           <l-icon :iconUrl="iconCaserne" :iconSize="[60, 40]"></l-icon>
         </l-marker>
 
-        <l-marker v-for="(camion, c) in camions" ref="camion" :lat-lng="conversion([camion.X, camion.Y], zoneRestreinte)" :key="'camion'+c">
+        <l-marker v-for="(camion, c) in camions" ref="camion" :lat-lng="conversion2(camion.X, camion.Y)" :key="'camion'+c">
           <l-popup>{{camion.name}}</l-popup>
           <l-icon :iconUrl="iconCamion" :iconSize="[60, 40]"></l-icon>
         </l-marker>
@@ -31,8 +31,11 @@
 <script>
 import "leaflet/dist/leaflet.css";
 import { mapActions, mapMutations, mapGetters } from "vuex";
+import itineraireMixins from "@/mixins/itineraireMixins";
+import coordMixins from "@/mixins/coordMixins";
 
 export default {
+  mixins: [itineraireMixins, coordMixins],
   props: {
     flammes: {
       type: Array,
@@ -63,16 +66,19 @@ export default {
       centreCarte: [45.74, 4.85]
     };
   },
-  beforeMount() {
-    console.log(this.camions);console.log("Carte.vue - this.camions");
-  },
   methods: {
     async getItineraire(depart, arrivee) {
-      this.itineraire = await this.$calculItineraire(depart, arrivee).then(response => { return response})
+      this.itineraire = await this.calculItineraire(depart, arrivee).then(response => { return response})
     },
-    conversion(gridCoord, zoneRestreinte) {
-        const testc = this.$conversion(gridCoord, zoneRestreinte);
-        return testc;    
+    conversion2(x, y) {
+      if(x && y) {
+        const tab = [x, y];
+        const testc = this.conversion(tab, this.zoneRestreinte);
+        return testc;
+      }
+      else {
+        return [1, 1];
+      }
     }
   }
 };
