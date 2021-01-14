@@ -20,18 +20,23 @@ export default {
   },
   data() {
     return {
-      flammes: [{rayon: 1, intensite: 1, coord: [45.7412, 4.836]}, {rayon: 2, intensite: 1, coord: [45.74, 4.852]}]
+      flammes: [{rayon: 1, intensite: 1, coord: [45.7412, 4.836]}, {rayon: 2, intensite: 1, coord: [45.74, 4.852]}],
     }
   },
   async mounted() {
-    this.flammes = await this.getCoord()
+    this.flammes = await this.getInfos()
   },
   methods: {
-    async getCoord() {
-      const res = await this.$axios.get("http://localhost:5002/flammes").then((response) => {return response.data});
-      this.coor = res;
-      return res;
+    getInfos() {
+      this.intervalInfos =  setInterval(() => {
+        this.$axios.get('http://localhost:5002/simul', { progress: false }).then(response => {
+          this.flammes = response.data.flammes;
+        })
+      }, 500)
     }
+  },
+  beforeDestroy() {
+    clearInterval(this.getInfos);
   }
 }
 </script>
@@ -41,7 +46,7 @@ h1, h2 {
   text-align: center;
 }
 #simul {
-  height: 500px;
+  height: 600px;
   display: flex;
 }
 </style>

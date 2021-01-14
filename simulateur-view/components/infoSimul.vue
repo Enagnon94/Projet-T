@@ -2,9 +2,8 @@
     <div id="infoSimul">
         <ul v-for="(flamme, f) in flammes" :key="'infoFlamme'+f">
             <p>Flamme {{f}} : </p>
-            <li>Coordonnées : {{flamme.coord}}</li>
-            <li>Rayon : {{flamme.rayon}}</li>
-            <li>Intensité : {{flamme.intensite}}</li>
+            <li>Rayon : {{flamme.Rayon}}</li>
+            <li>Intensité : {{flamme.Intensité}}</li>
         </ul>
     </div>
 </template>

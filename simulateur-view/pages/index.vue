@@ -17,7 +17,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  middleware: "index"
+}
 </script>
 
 <style>
