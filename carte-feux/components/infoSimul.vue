@@ -1,12 +1,10 @@
 <template>
     <div id="infoSimul">
-        <div>{{casernes}}</div>
         <ul v-for="(flamme, f) in flammes" :key="'infoFlamme'+f">
             <input type="checkbox" @change="displayFlamme">
                 Flamme {{f}} : 
-            <li>Coordonnées : {{flamme.coord}}</li>
-            <li>Rayon : {{flamme.rayon}}</li>
-            <li>Intensité : {{flamme.intensite}}</li>
+            <li>Coordonnées : {{flamme.X}} , {{flamme.Y}}</li>
+            <li>Intensité : {{flamme.Intensité}}</li>
         </ul>
         
         <ul v-for="(caserne, c) in casernes" :key="'infoCaserne'+c">

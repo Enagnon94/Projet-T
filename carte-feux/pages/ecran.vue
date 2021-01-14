@@ -4,8 +4,16 @@
     <h2>Centre de Villeurbanne</h2>
 
     <div id="simul">
-      <carte :flammes="capteurs" :casernes="casernes" :camions="camions" ></carte>
-      <info-simul :flammes="capteurs" :casernes="casernes" :camions="camions"></info-simul>
+      <carte
+        :flammes="capteurs"
+        :casernes="casernes"
+        :camions="camions"
+      ></carte>
+      <info-simul
+        :flammes="capteurs"
+        :casernes="casernes"
+        :camions="camions"
+      ></info-simul>
     </div>
   </div>
 </template>
@@ -16,45 +24,57 @@ import infoSimul from "@/components/infoSimul";
 export default {
   components: {
     carte,
-    infoSimul
+    infoSimul,
   },
   data() {
     return {
-      capteurs: [{rayon: 1, intensite: 1, coord: [45.7412, 4.836]}, {rayon: 2, intensite: 1, coord: [45.735, 4.83]}],
+      capteurs: [
+        { rayon: 1, intensite: 1, coord: [45.7412, 4.836] },
+        { rayon: 2, intensite: 1, coord: [45.735, 4.83] },
+      ],
       casernes: [],
       camions: [],
       intervalInfos: "",
-      intervalCapteurs: ""
-    }
+      intervalCapteurs: "",
+      timeout: 1000,
+    };
   },
-  mounted() {
-    this.getInfos();
-    this.getCapteurs();
+  async mounted() {
+    await this.getInfos();
+    await this.getCapteurs();
   },
   methods: {
     getInfos() {
-      console.log("kllll");
-      this.intervalInfos =  setInterval(() => {
-        this.$axios.get('http://localhost:5002/emergency', { progress: false }).then(response => {
-          this.casernes = response.data.casernes;
-          this.camions = response.data.camions;
-        })
-      }, 1000)
+      this.intervalInfos = setInterval(() => {
+        this.$axios
+          .get("/emergency")
+          .then((response) => {
+            this.casernes = response.data.casernes;
+            this.camions = response.data.camions;
+          });
+      }, 500);
     },
     async getCapteurs() {
-      this.intervalCapteurs = setInterval(() => { 
-        this.$axios.get('http://localhost:5002/simul', { progress: false }).then(response => {
-        this.capteurs = response.data.capteurs;
-        return response.data;
-        })
+      this.intervalCapteurs = setInterval(() => {
+        this.$axios
+          .get("/simul")
+          .then((response) => {
+            this.capteurs = response.data.capteurs;
+            return response.data;
+          });
       }, 1000);
-    }
-  }
-}
+    },
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalInfos);
+    clearInterval(this.intervalCapteurs);
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-h1, h2 {
+h1,
+h2 {
   text-align: center;
 }
 #simul {
